@@ -1,0 +1,28 @@
+name: Sync to Repo Caramelo
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo Spectrainterface
+        uses: actions/checkout@v3
+
+      - name: Copy spectrainterface folder to Repo Caramelo
+        run: |
+          git clone https://<GITHUB_TOKEN>:git@github.com:lnls-ids/web-app.git
+          cp -r spectrainterface web-app/api/
+          cd web-app
+          git config user.name "your-username"
+          git config user.email "your-email@example.com"
+          git add .
+          git commit -m "Update spectrainterface folder from Repo Spectrainterface"
+          git push origin master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
